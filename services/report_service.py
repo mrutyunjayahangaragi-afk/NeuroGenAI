@@ -85,6 +85,15 @@ def generate_report(
     if feature_df is not None and not feature_df.empty:
         for _, row in feature_df.head(5).iterrows():
             feat_rows += f"| {row['feature']} | {row['importance']:.4f} | {row.get('band','').capitalize()} | {row.get('region','')} |\n"
+    # Sources
+    ref_text = ""
+    for i, src in enumerate(rag_sources, 1):
+        ref_text += f"{i}. **{src['source']}** — relevance score: {src['score']:.2f}\n"
+        ref_text += f"   > {src['text'][:150]}...\n\n"
+
+    if not ref_text:
+        ref_text = "*No external sources retrieved for this analysis.*\n"
+
     demo_banner = "\n> ⚠️ **DEMO MODE**: Results generated from synthetic data for demonstration purposes.\n" if is_demo else ""
 
     band_rows_text = band_rows if band_rows else "| (Feature data not available) | — |\n"
