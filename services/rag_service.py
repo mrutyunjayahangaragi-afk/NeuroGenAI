@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 import re
 import textwrap
-from typing import Optional
+from typing import Optional, Any
 import numpy as np
 
 # ─────────────────────────────────────────────────────────────────────────────
