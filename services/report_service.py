@@ -85,17 +85,14 @@ def generate_report(
     if feature_df is not None and not feature_df.empty:
         for _, row in feature_df.head(5).iterrows():
             feat_rows += f"| {row['feature']} | {row['importance']:.4f} | {row.get('band','').capitalize()} | {row.get('region','')} |\n"
-
-    # Sources
-    ref_text = ""
-    for i, src in enumerate(rag_sources, 1):
-        ref_text += f"{i}. **{src['source']}** — relevance score: {src['score']:.2f}\n"
-        ref_text += f"   > {src['text'][:150]}...\n\n"
-
-    if not ref_text:
-        ref_text = "*No external sources retrieved for this analysis.*\n"
-
     demo_banner = "\n> ⚠️ **DEMO MODE**: Results generated from synthetic data for demonstration purposes.\n" if is_demo else ""
+
+    band_rows_text = band_rows if band_rows else "| (Feature data not available) | — |\n"
+    rule_rows_text = rule_rows if rule_rows else "| (No rules computed) | — | — | — | — |\n"
+    feat_rows_text = feat_rows if feat_rows else "| (Feature importance not available) | — | — | — |\n"
+    ai_summary_text = ai_summary if ai_summary else "*AI summary not generated — AI provider unavailable or analysis not run.*"
+    single_class_note = "- Single-class model detected: rule-based scoring used as primary signal.\n" if result.get("single_class") else ""
+    dim_mismatch_note = "- Feature dimension mismatch detected: array was auto-padded/truncated.\n" if result.get("dim_mismatch") else ""
 
     report = f"""# Neuro Gen AI 2.0 — Clinical Screening Report
 
@@ -109,7 +106,6 @@ def generate_report(
 | Analysis ID | `{analysis_id}` |
 | Generated | {ts} |
 | System | Neuro Gen AI 2.0 |
-
 | Dataset | {'DEMO (Synthetic)' if is_demo else 'Patient EDF Upload'} |
 | Report Type | AI-Assisted EEG Screening |
 
@@ -158,29 +154,26 @@ def generate_report(
 
 | Band | Average Power |
 |------|--------------|
-{band_rows if band_rows else "| (Feature data not available) | — |\n"}
-
+{band_rows_text}
 ---
 
 ## Biomarker Rule Engine Results
 
 | Biomarker | Value | Normal Range | Score | Status |
 |-----------|-------|-------------|-------|--------|
-{rule_rows if rule_rows else "| (No rules computed) | — | — | — | — |\n"}
-
+{rule_rows_text}
 ---
 
 ## Top Contributing Features (ML Model)
 
 | Feature | Importance | Band | Region |
 |---------|-----------|------|--------|
-{feat_rows if feat_rows else "| (Feature importance not available) | — | — | — |\n"}
-
+{feat_rows_text}
 ---
 
 ## AI-Generated Clinical Summary
 
-{ai_summary if ai_summary else "*AI summary not generated — AI provider unavailable or analysis not run.*"}
+{ai_summary_text}
 
 ---
 
@@ -198,9 +191,7 @@ def generate_report(
 - Antipsychotic medications may alter EEG patterns and affect screening accuracy.
 - EEG biomarkers for schizophrenia overlap with other neuropsychiatric conditions.
 - Single-session EEG provides lower reliability than longitudinal assessment.
-{'- Single-class model detected: rule-based scoring used as primary signal.' if result.get("single_class") else ''}
-{'- Feature dimension mismatch detected: array was auto-padded/truncated.' if result.get("dim_mismatch") else ''}
-
+{single_class_note}{dim_mismatch_note}
 ---
 
 ## ⚠️ Medical Safety Disclaimer
