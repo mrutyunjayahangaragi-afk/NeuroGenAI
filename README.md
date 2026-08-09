@@ -1,225 +1,137 @@
-<div align="center">
-  <h1> ENIGMA 2.0 — NeuroScan AI</h1>
-  <p><strong>EEG-Based Neural Intelligence & Generative Model Analysis</strong></p>
-  <p>Advanced brainwave analysis powered by artificial intelligence and machine learning<br>
-  Developed by <b>Team GenAI</b> for ENIGMA Hackathon 2.0</p>
+# 🧠 Neuro Gen AI 2.0 — Neural EEG Intelligence Platform
 
-
-[![Live Demo](https://img.shields.io/badge/Live_App-View_Dashboard-239120?style=for-the-badge&logo=streamlit)](https://enigma20teamgenai-123.streamlit.app/)
-[![Python](https://img.shields.io/badge/Python-3.7%2B-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](https://www.python.org/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge\&logo=scikit-learn\&logoColor=white)](https://scikit-learn.org/)
-[![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge\&logo=numpy\&logoColor=white)](https://numpy.org/)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-  
-</div>
-
-## 👉 **[Access the Live Application Here](https://enigma20teamgenai-123.streamlit.app/)**
----
- 
-##  Overview
-**NeuroScan AI** is an enterprise-grade, AI-powered electroencephalogram (EEG) signal analysis platform engineered by Team GenAI. This sophisticated system leverages state-of-the-art machine learning algorithms to interpret, classify, and derive actionable insights from complex brainwave data patterns.
-
-Developed as part of the ENIGMA 2.0 Hackathon, NeuroScan AI integrates advanced signal processing techniques, comprehensive data validation protocols, and predictive modeling into a seamless, production-ready pipeline designed for scalability and reliability.
-
-###  Use Cases
-* **Medical Diagnostics** — Assist healthcare professionals in neurological assessment
-* **Cognitive Research** — Support neuroscience research with automated EEG analysis
-* **Brain-Computer Interfaces** — Enable real-time brainwave interpretation for BCI applications
-* **Mental Health Monitoring** — Track cognitive states and mental wellness indicators
+> **From EEG Signal Processing to Evidence-Grounded AI Insights**  
+> *AI-Assisted Neural Pattern Screening, Feature Importance, FAISS Literature RAG, & Generative Explainability*
 
 ---
 
-## ✨ Key Features
+## 📌 Executive Summary
 
-<table>
-  <tr>
-    <td width="50%">
-      <h3> Advanced Analysis</h3>
-      <ul>
-        <li><b>Multi-Class Classification</b> — Precise categorization of brainwave patterns</li>
-        <li><b>Real-Time Processing</b> — Low-latency inference for live EEG streams</li>
-        <li><b>Signal Preprocessing</b> — Automated noise reduction and artifact removal</li>
-        <li><b>Feature Extraction</b> — Intelligent dimensionality reduction techniques</li>
-      </ul>
-    </td>
-    <td width="50%">
-      <h3> Robust Infrastructure</h3>
-      <ul>
-        <li><b>Production-Ready Model</b> — Pre-trained, validated, and optimized</li>
-        <li><b>Data Integrity Pipeline</b> — Comprehensive validation and quality assurance</li>
-        <li><b>Interactive Dashboard</b> — Intuitive web interface with real-time visualization</li>
-        <li><b>Modular Design</b> — Extensible architecture for custom implementations</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+Traditional EEG analysis requires deep domain expertise to interpret multi-channel spectral signals, power ratios, and regional abnormalities. **Neuro Gen AI** bridges signal processing and clinical understandability by combining:
+
+1. **MNE-Python Signal Preprocessing**: 250Hz resampling, 50Hz notch filter, 0.5–45Hz bandpass filter, average re-referencing.
+2. **Random Forest Machine Learning**: Pre-trained 300-estimator ensemble combined 50/50 with an 8-biomarker rule engine.
+3. **Explainable AI (XAI)**: Feature Importance (Mean Decrease in Impurity) & anatomical region/band contribution breakdown.
+4. **FAISS Literature RAG**: Vector search over 32 indexed peer-reviewed neurophysiology publications.
+5. **Generative AI Gateway**: Server-side multi-model integration (OpenRouter API → Google Gemini → Ollama Local) with responsible medical safety disclaimers.
 
 ---
 
-## Architecture
-
-```mermaid
-graph LR
-    A[Raw EEG Data] --> B[Data Validation]
-    B --> C[Preprocessing]
-    C --> D[Feature Extraction]
-    D --> E[ML Model]
-    E --> F[Classification Output]
-    F --> G[Streamlit Dashboard]
-```
-
-## Core Components:
-- Data Ingestion Layer — Handles multiple EEG data formats
-- Validation Module — Ensures data quality and integrity
-- ML Engine — Scikit-learn based classification system
-- Presentation Layer — Streamlit-powered interactive interface
-
-## Getting Started
+## ⚡ Quick Start Guide
 
 ### Prerequisites
+- Python 3.9+
+- Node.js 18+ & npm
 
-Ensure your development environment meets the following requirements:
-
-| Requirement          | Version   | Purpose               |
-|----------------------|-----------|-----------------------|
-| Python               | 3.8+      | Core runtime          |
-| pip                  | Latest    | Package management    |
-| Virtual Environment  | Recommended | Dependency isolation |
-| RAM                  | 4GB+      | Model inference       | 
-
-## Installation
-
-### Step 1: Clone the Repository
+### 1. Backend Engine (FastAPI) Setup
 
 ```bash
+# Clone the repository
 git clone https://github.com/pranay-surya/ENIGMA_2.0__TeamGenAI.git
-cd ENIGMA_2.0__TeamGenAI
-```
+cd NeuroGenAI
 
-### Step 2: Set Up Virtual Environment
+# Set up Python virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-
-# On macOS/Linux:
-source venv/bin/activate
-
-# On Windows:
-venv\Scripts\activate
-```
-
-### Step 3: Install Dependencies
-
-```bash
-pip install --upgrade pip
+# Install requirements
 pip install -r requirements.txt
+
+# Start FastAPI Backend Server (runs on http://127.0.0.1:8000)
+python api.py
 ```
 
-### Step 4: Verify Installation
+### 2. Frontend Client (Vite + React + TypeScript) Setup
 
 ```bash
-python -c "import streamlit; import sklearn; print('Installation successful!')"
+# Navigate to frontend directory
+cd frontend
+
+# Install node dependencies
+npm install
+
+# Start Vite Development Server (runs on http://localhost:3000)
+npm run dev
 ```
 
 ---
 
-## Usage
+## 🏗️ System Architecture Flow
 
-### Launch Web Application
-
-```bash
-streamlit run app.py
 ```
-
-The application will be accessible at:
-👉 http://localhost:8501
+User / Healthcare Professional
+             │
+             ▼
+     ┌───────────────┐
+     │  Vite React UI│ (Instant <100ms client navigation)
+     └───────┬───────┘
+             │ Upload EEG (.edf, .set, .cnt) / Try Demo Signal
+             ▼
+   ┌──────────────────┐
+   │ FastAPI Backend  │ (Preloaded ML Model & FAISS Index)
+   └─────────┬────────┘
+             │
+ ┌───────────┴───────────┐
+ │ 1. MNE Preprocessing  │ (250Hz, Notch 50Hz, Bandpass 0.5-45Hz)
+ └───────────┬───────────┘
+             │
+ ┌───────────┴───────────┐
+ │ 2. Feature Vectorizer │ (Welch PSD, Theta/Alpha Ratio, Band Powers)
+ └───────────┬───────────┘
+             │
+ ┌───────────┴───────────┐
+ │ 3. Random Forest (50%)│ + 8-Biomarker Rule Engine (50%)
+ └───────────┬───────────┘
+             │
+ ┌───────────┴───────────┐
+ │ 4. Feature Importance │ (MDI & Anatomical Regional Weights)
+ └───────────┬───────────┘
+             │
+ ┌───────────┴───────────┐
+ │ 5. FAISS RAG Retrieval│ (32 Literature Chunks)
+ └───────────┬───────────┘
+             │
+ ┌───────────┴───────────┐
+ │ 6. Generative AI      │ (OpenRouter / Gemini / Ollama)
+ └───────────┬───────────┘
+             │
+             ▼
+   ┌──────────────────┐
+   │ AI Report & Chat │ (Markdown Clinical Screening Summary)
+   └──────────────────┘
+```
 
 ---
 
-### Run Data Validation Pipeline
+## 🎯 High-Value Features
 
-```bash
-jupyter notebook data_validation.ipynb
+| Feature | Description |
+|---|---|
+| 🧪 **Demo Mode (`Try Demo Analysis`)** | One-click real pipeline execution using preloaded sample EEG datasets (no file required for judge testing). |
+| 📈 **Interactive EEG Waveform Trace** | Multi-channel interactive waveform trace with time-range selection and spectral band distribution charts. |
+| ⚛️ **Explainable AI (MDI)** | Top contributing features with explicit Gini importance percentages and directional indicators (`Suppressed 📉` / `Elevated 📈`). |
+| 🛡️ **FAISS Literature RAG** | Vector search over peer-reviewed research papers returning relevance scores and literature excerpts. |
+| 🤖 **Contextual AI Neuro Assistant** | Grounded clinical chat assistant aware of active patient features, XAI weights, and retrieved RAG sources. |
+| 📄 **Clinical Report Compiler** | Multi-section clinical screening report exportable in Markdown (.md) and Plain Text. |
+| ⚖️ **Side-by-Side Comparison** | Select two historical EEG recordings to compare risk scores, model confidence, and biomarker profiles side-by-side. |
+
+---
+
+## 🔒 Security & Environment Configuration
+
+Configuration is managed via `.env` on the backend server. **Zero API keys are exposed to the frontend client.**
+
+```ini
+# Copy .env.example to .env
+OPENROUTER_API_KEY=sk-or-v1-your-key-here
+OPENROUTER_MODEL=google/gemini-2.0-flash-lite-preview:free
+GEMINI_API_KEY=your-gemini-api-key-here
+OLLAMA_BASE_URL=http://localhost:11434
+CLOUDINARY_URL=cloudinary://your-key:your-secret@your-cloud-name
 ```
 
 ---
 
- 
-## Model Specifications
+## ⚠️ Responsible Medical Safety Disclaimer
 
-| Specification       | Details                                    |
-| ------------------- | ------------------------------------------ |
-| Model Type          | Supervised Classification                  |
-| Algorithm           | Ensemble Methods (Random Forest / XGBoost) |
-| Input Format        | Preprocessed EEG feature vectors           |
-| Output              | Multi-class brainwave state classification |
-| Training Dataset    | Validated EEG signal recordings            |
-| Performance Metrics | Accuracy, Precision, Recall, F1-Score      |
-| Model File          | `eeg_model.pkl` (Serialized Pickle)        |
-| Validation          | K-fold cross-validation                    |
-
-
-## Technology Stack
-
-| Category          | Technology                  | Purpose                                 |
-| ----------------- | --------------------------- | --------------------------------------- |
-| Core Language     | Python 3.8+                 | Primary development language            |
-| Machine Learning  | Scikit-learn, NumPy, Pandas | Model development and data manipulation |
-| Web Framework     | Streamlit                   | Interactive web application             |
-| Signal Processing | SciPy, MNE-Python           | EEG signal preprocessing                |
-| Visualization     | Matplotlib, Plotly          | Data visualization and reporting        |
-| Development       | Jupyter Notebook            | Exploratory analysis and validation     |
-
-
-## 👥 Team  
-**Team GenAI — ENIGMA Hackathon 2.0**
-
-<table>
-<tr>
-
-<td align="center">
-<a href="https://github.com/pranay-surya">
-<img src="https://github.com/pranay-surya.png" width="110px;" alt="Pranay Suryawanshi"/><br />
-<sub><b>Pranay Suryawanshi</b></sub>
-</a><br />
-<sub>Lead Developer</sub>
-</td>
-
-<td align="center">
-<a href="https://github.com/Bhatwar195">
-<img src="https://github.com/Bhatwar195.png" width="110px;" alt="Bhavesh Hatwar"/><br />
-<sub><b>Bhavesh Hatwar</b></sub>
-</a><br />
-<sub>Team Member</sub>
-</td>
-
-<td align="center">
-<a href="https://github.com/BhuvanBhonde712">
-<img src="https://github.com/BhuvanBhonde712.png" width="110px;" alt="Bhuvan Bhonde"/><br />
-<sub><b>Bhuvan Bhonde</b></sub>
-</a><br />
-<sub>Team Member</sub>
-</td>
-
-<td align="center">
-<a href="https://github.com/nirjarakhante">
-<img src="https://github.com/nirjarakhante.png" width="110px;" alt="Nirjara Khante"/><br />
-<sub><b>Nirjara Khante</b></sub>
-</a><br />
-<sub>Team Member</sub>
-</td>
-
-<td align="center">
-<a href="https://github.com/SanskrutiHarne72">
-<img src="https://github.com/SanskrutiHarne72.png" width="110px;" alt="Sanskruti Harne"/><br />
-<sub><b>Sanskruti Harne</b></sub>
-</a><br />
-<sub>Team Member</sub>
-</td>
-
-</tr>
-</table>
-
+> **Neuro Gen AI provides AI-assisted EEG analysis for screening and research support. Results do not constitute a definitive medical diagnosis and must be evaluated by a qualified healthcare professional (neurologist or clinical neurophysiologist).**
