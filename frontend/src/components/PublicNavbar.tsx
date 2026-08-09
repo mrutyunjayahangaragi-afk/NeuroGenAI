@@ -17,23 +17,25 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
-          <button onClick={() => onNavigate('Landing Page')} className="text-sm font-bold text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 pb-1">
-            Home
-          </button>
-          <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 dark:text-slate-400 transition-colors">
-            Features
-          </a>
-          <a href="#how-it-works" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 dark:text-slate-400 transition-colors">
-            How It Works
-          </a>
-          <a href="#technology" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 dark:text-slate-400 transition-colors">
-            Technology
-          </a>
+        <div className="flex items-center gap-4 md:gap-8">
+          <div className="hidden md:flex items-center gap-8">
+            <button onClick={() => onNavigate('Landing Page')} className="text-sm font-bold text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 pb-1">
+              Home
+            </button>
+            <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 dark:text-slate-400 transition-colors">
+              Features
+            </a>
+            <a href="#how-it-works" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 dark:text-slate-400 transition-colors">
+              How It Works
+            </a>
+            <a href="#technology" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 dark:text-slate-400 transition-colors">
+              Technology
+            </a>
+          </div>
           
           <button 
             onClick={() => onNavigate('Analyze EEG')}
-            className="btn-primary text-sm font-bold px-5 py-2"
+            className="btn-primary text-xs md:text-sm font-bold px-4 py-2 md:px-5 md:py-2 whitespace-nowrap"
           >
             Get Started →
           </button>
