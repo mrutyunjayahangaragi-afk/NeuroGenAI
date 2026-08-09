@@ -14,11 +14,20 @@ import numpy as np
 #  AVAILABILITY CHECK
 # ─────────────────────────────────────────────────────────────────────────────
 try:
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+    TFIDF_AVAILABLE = True
+except ImportError:
+    TFIDF_AVAILABLE = False
+
+try:
     from sentence_transformers import SentenceTransformer
     import faiss
-    RAG_AVAILABLE = True
+    ST_AVAILABLE = True
 except ImportError:
-    RAG_AVAILABLE = False
+    ST_AVAILABLE = False
+
+RAG_AVAILABLE = TFIDF_AVAILABLE or ST_AVAILABLE
 
 KNOWLEDGE_BASE_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)),
@@ -76,18 +85,20 @@ def _load_and_chunk(path: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUN
 #  INDEX BUILDING  (cached via Streamlit)
 # ─────────────────────────────────────────────────────────────────────────────
 class RAGIndex:
-    """Holds the embedding model, FAISS index, and chunk metadata."""
+    """Holds the embedding model, vector index, and chunk metadata."""
 
     def __init__(self):
-        self.model:  Optional[SentenceTransformer] = None
-        self.index:  Optional["faiss.IndexFlatIP"] = None
+        self.vectorizer: Optional[Any] = None
+        self.tfidf_matrix: Optional[Any] = None
+        self.st_model: Optional[Any] = None
+        self.faiss_index: Optional[Any] = None
         self.chunks: list[dict] = []
-        self.ready:  bool = False
-        self.error:  Optional[str] = None
+        self.ready: bool = False
+        self.error: Optional[str] = None
 
     def build(self) -> None:
         if not RAG_AVAILABLE:
-            self.error = "sentence-transformers or faiss-cpu not installed."
+            self.error = "No vector engine available."
             return
 
         try:
@@ -96,16 +107,20 @@ class RAGIndex:
                 self.error = f"Knowledge base not found or empty: {KNOWLEDGE_BASE_PATH}"
                 return
 
-            self.model = SentenceTransformer(EMBED_MODEL_NAME)
-            texts      = [c["text"] for c in self.chunks]
-            embeddings = self.model.encode(texts, normalize_embeddings=True,
-                                           show_progress_bar=False)
-            embeddings = np.array(embeddings, dtype="float32")
+            texts = [c["text"] for c in self.chunks]
 
-            dim         = embeddings.shape[1]
-            self.index  = faiss.IndexFlatIP(dim)   # Inner product on L2-normed = cosine similarity
-            self.index.add(embeddings)
-            self.ready  = True
+            if TFIDF_AVAILABLE:
+                self.vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2))
+                self.tfidf_matrix = self.vectorizer.fit_transform(texts)
+                self.ready = True
+            elif ST_AVAILABLE:
+                self.st_model = SentenceTransformer(EMBED_MODEL_NAME)
+                embeddings = self.st_model.encode(texts, normalize_embeddings=True, show_progress_bar=False)
+                embeddings = np.array(embeddings, dtype="float32")
+                dim = embeddings.shape[1]
+                self.faiss_index = faiss.IndexFlatIP(dim)
+                self.faiss_index.add(embeddings)
+                self.ready = True
 
         except Exception as e:
             self.error = str(e)
@@ -116,29 +131,48 @@ class RAGIndex:
         Retrieve top_k chunks most relevant to the query.
         Returns list of dicts: {text, source, score}.
         """
-        if not self.ready or self.model is None or self.index is None:
+        if not self.ready:
             return []
 
         try:
-            q_emb = self.model.encode([query], normalize_embeddings=True,
-                                      show_progress_bar=False)
-            q_emb = np.array(q_emb, dtype="float32")
-            scores, indices = self.index.search(q_emb, top_k)
+            if self.vectorizer is not None and self.tfidf_matrix is not None:
+                q_vec = self.vectorizer.transform([query])
+                sims = cosine_similarity(q_vec, self.tfidf_matrix)[0]
+                top_indices = np.argsort(sims)[::-1][:top_k]
 
-            results = []
-            for score, idx in zip(scores[0], indices[0]):
-                if idx < 0 or idx >= len(self.chunks):
-                    continue
-                chunk = self.chunks[idx]
-                results.append({
-                    "text":   chunk["text"],
-                    "source": chunk["source"],
-                    "score":  float(score),
-                })
-            return results
+                results = []
+                for idx in top_indices:
+                    score = float(sims[idx])
+                    if score <= 0.0:
+                        continue
+                    chunk = self.chunks[idx]
+                    results.append({
+                        "text": chunk["text"],
+                        "source": chunk["source"],
+                        "score": round(score, 2),
+                    })
+                return results
+
+            elif self.st_model is not None and self.faiss_index is not None:
+                q_emb = self.st_model.encode([query], normalize_embeddings=True, show_progress_bar=False)
+                q_emb = np.array(q_emb, dtype="float32")
+                scores, indices = self.faiss_index.search(q_emb, top_k)
+
+                results = []
+                for score, idx in zip(scores[0], indices[0]):
+                    if idx < 0 or idx >= len(self.chunks):
+                        continue
+                    chunk = self.chunks[idx]
+                    results.append({
+                        "text": chunk["text"],
+                        "source": chunk["source"],
+                        "score": float(score),
+                    })
+                return results
 
         except Exception:
             return []
+        return []
 
 
 # ─────────────────────────────────────────────────────────────────────────────
